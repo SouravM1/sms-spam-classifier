@@ -1,8 +1,12 @@
 import streamlit as st
 import pickle
 import string
+import nltk
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
+
+# 🔥 FIX (VERY IMPORTANT)
+nltk.download('stopwords')
 
 # Initialize
 ps = PorterStemmer()
@@ -11,7 +15,7 @@ stop_words = set(stopwords.words('english'))
 # Text preprocessing
 def transform_text(text):
     text = text.lower()
-    words = text.split()   # ✅ matches your notebook
+    words = text.split()
 
     # Remove non-alphanumeric
     words = [word for word in words if word.isalnum()]
@@ -37,18 +41,11 @@ if st.button("Predict"):
     if input_sms.strip() == "":
         st.warning("Please enter a message")
     else:
-        # Preprocess
         transformed_sms = transform_text(input_sms)
-
-        # Vectorize
         vector_input = tfidf.transform([transformed_sms])
-
-        # Predict
         result = model.predict(vector_input)[0]
 
-        # Output
         if result == 1:
             st.error("🚨 Spam")
         else:
-            venv
             st.success("✅ Not Spam")
