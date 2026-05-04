@@ -5,34 +5,26 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
 
-# 🔥 FIX (VERY IMPORTANT)
 nltk.download('stopwords')
 
-# Initialize
 ps = PorterStemmer()
 stop_words = set(stopwords.words('english'))
 
-# Text preprocessing
 def transform_text(text):
     text = text.lower()
     words = text.split()
 
-    # Remove non-alphanumeric
     words = [word for word in words if word.isalnum()]
 
-    # Remove stopwords & punctuation
     words = [word for word in words if word not in stop_words and word not in string.punctuation]
 
-    # Stemming
     words = [ps.stem(word) for word in words]
 
     return " ".join(words)
 
-# Load model and vectorizer
 tfidf = pickle.load(open('vectorizer.pkl', 'rb'))
 model = pickle.load(open('model.pkl', 'rb'))
 
-# UI
 st.title("📩 SMS Spam Detector")
 
 input_sms = st.text_area("Enter the message")
